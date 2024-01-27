@@ -2,7 +2,11 @@
   "name": "web-encrypt",
   "version": "1.0.0",
   "description": "use for encrypt and decrypt data",
-  "source": "encrypt.html",
+  "source": [
+    "tools.html",
+    "encrypt.html",
+    "lottie2Sprite.html"
+  ],
   "scripts": {
     "start": "parcel",
     "build": "parcel build --no-source-maps"
@@ -10,7 +14,9 @@
   "author": "inti",
   "license": "ISC",
   "dependencies": {
-    "crypto-js": "^4.1.1"
+    "crypto-js": "^4.1.1",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1"
   },
   "devDependencies": {
     "parcel": "^2.2.0",

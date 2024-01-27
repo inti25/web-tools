@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generating sprite sheet from a lottie</title>
+    <meta charset="UTF-8" />
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<div style="width: 500px; height: 500px; ">
+    <lottie-player
+            renderer="svg"
+            src=""
+            style="border: 1px rgba(0, 0,0, 0.1) solid; display: inline-block"
+            autoplay
+    />
+</div>
+<div
+        style="width: 500px; margin-top: 30px; display: grid; grid-gap: 10px; grid-template-areas: 'input load' 'convert convert' 'convertPNG convertPNG'; grid-template-columns: 1fr 150px;"
+>
+    <input
+            id="lottieUrl"
+            type="text"
+            placeholder="URL to Lottie"
+            value="https://assets4.lottiefiles.com/packages/lf20_RrqueP.json"
+    />
+    <button id="load">Load</button>
+    <button
+            id="convert"
+            style="grid-area: convert; border: 0; padding: 10px; color: white; background-color: darkblue;"
+    >
+        Convert Frame SVGs
+    </button>
+    <button
+            id="convertPng"
+            style="grid-area: convertPNG; border: 0; padding: 10px; color: white; background-color: green;"
+    >
+        Convert Frame PNGs
+    </button>
+</div>
+<div
+        id="logs"
+        style="font-size: 10px; font-family: monospace; position: absolute; top: 10px; right: 10px; width: 500px; height: 500px; overflow-y: scroll;"
+></div>
+
+<script src="lottie2Sprite.js" type="module"></script>
+</body>
+</html>
