@@ -9,6 +9,9 @@ const btnLoad = document.querySelector("#load");
 const btnConvert = document.querySelector("#convert");
 const btnConvertPng = document.querySelector("#convertPng");
 const inputLottieUrl = document.querySelector("#lottieUrl");
+const spriteName = document.querySelector("#spriteName");
+const imageWidth = document.querySelector("#imgW");
+const imageHeight = document.querySelector("#imgH");
 
 const log = message => {
     const msgElem = document.createElement("p");
@@ -29,7 +32,7 @@ const loadAsImage = markup => {
 const convert = async url => {
     cancelled = false;
 
-    log(`Loading ${url}`);
+    log(`Loading image`);
 
     // Get lottie size
     const lottieDetails = await getLottieDetails(url);
@@ -61,7 +64,7 @@ const convert = async url => {
 
             try {
                 const svgAsImg = await loadAsImage(svgMarkup);
-                photoZip.file(`${f}.svg`, svgMarkup,{base64: false});
+                photoZip.file(`${spriteName.value}_${f}.svg`, svgMarkup,{base64: false});
                 const xOffset = lottieDetails.width * (f - 1);
 
                 ctx.drawImage(svgAsImg, xOffset, 0);
@@ -102,10 +105,8 @@ const getLottieDetails = async url => {
 };
 
 const convertPNG = async url => {
-    console.log('convertPNG')
     cancelled = false;
-
-    log(`Loading ${url}`);
+    log(`Loading image`);
 
     // Get lottie size
     const lottieDetails = await getLottieDetails(url);
@@ -138,13 +139,13 @@ const convertPNG = async url => {
             try {
                 const svgAsImg = await loadAsImage(svgMarkup);
                 const canTemp = document.createElement('canvas'); // Not shown on page
-                canTemp.height = lottieDetails.height;
-                canTemp.width = lottieDetails.width;
+                canTemp.width = imageWidth.value;
+                canTemp.height = imageHeight.value;
                 const ctxTemp = canTemp.getContext('2d');
-                ctxTemp.drawImage(svgAsImg, 0, 0);
+                ctxTemp.drawImage(svgAsImg, 0, 0, canTemp.width, canTemp.height);
                 const savable = new Image();
                 savable.src = canTemp.toDataURL("image/png");
-                photoZip.file(`${f}.png`, savable.src.substr(savable.src.indexOf(',')+1),{base64: true});
+                photoZip.file(`${spriteName.value}_${f}.png`, savable.src.substr(savable.src.indexOf(',')+1),{base64: true});
 
             } catch (e) {
                 console.log(e);
@@ -163,9 +164,11 @@ const convertPNG = async url => {
 };
 
 if (btnLoad) {
-    btnLoad.addEventListener("click", () => {
+    btnLoad.addEventListener("click", async () => {
         player.load(inputLottieUrl.value);
-
+        const lottieDetails = await getLottieDetails(inputLottieUrl.value);
+        imageWidth.value = lottieDetails.width;
+        imageHeight.value = lottieDetails.height;
         cancelled = false;
     });
 }

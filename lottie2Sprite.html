@@ -21,15 +21,27 @@
     />
 </div>
 <div
-        style="width: 500px; margin-top: 30px; display: grid; grid-gap: 10px; grid-template-areas: 'input load' 'convert convert' 'convertPNG convertPNG'; grid-template-columns: 1fr 150px;"
+        style="width: 500px; margin-top: 30px; display: grid; grid-gap: 10px; grid-template-areas: 'input load' 'imgSize txtImgSize' 'spriteName txtSpriteName' 'convert convert' 'convertPNG convertPNG'; grid-template-columns: 1fr 150px;"
 >
     <input
             id="lottieUrl"
             type="text"
-            placeholder="URL to Lottie"
-            value="https://assets4.lottiefiles.com/packages/lf20_RrqueP.json"
+            placeholder="URL or Lottie Json"
     />
     <button id="load">Load</button>
+
+    <div id="imgSize" style="display: flex; gap: 5px">
+        <input id="imgW" placeholder="image width" type="text" />
+        <span>x</span>
+        <input id="imgH" placeholder="image height" type="text" />
+    </div>
+    <div id="txtImgSize">Image Size</div>
+    <input
+            id="spriteName"
+            type="text"
+            placeholder="Sprite name"
+    />
+    <div id="txtSpriteName">Sprite Name</div>
     <button
             id="convert"
             style="grid-area: convert; border: 0; padding: 10px; color: white; background-color: darkblue;"
