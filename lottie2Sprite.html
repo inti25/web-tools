@@ -21,7 +21,7 @@
     />
 </div>
 <div
-        style="width: 500px; margin-top: 30px; display: grid; grid-gap: 10px; grid-template-areas: 'input load' 'imgSize txtImgSize' 'spriteName txtSpriteName' 'convert convert' 'convertPNG convertPNG'; grid-template-columns: 1fr 150px;"
+        style="width: 500px; margin-top: 30px; display: grid; grid-gap: 10px; grid-template-areas: 'input load' 'imgSize txtImgSize' 'spriteName txtSpriteName' 'convert convert' 'convertPNG convertPNG' 'convertSprite convertSprite'; grid-template-columns: 1fr 150px;"
 >
     <input
             id="lottieUrl"
@@ -53,6 +53,12 @@
             style="grid-area: convertPNG; border: 0; padding: 10px; color: white; background-color: green;"
     >
         Convert Frame PNGs
+    </button>
+    <button
+            id="convertSprite"
+            style="grid-area: convertSprite; border: 0; padding: 10px; color: white; background-color: darkgoldenrod;"
+    >
+        Convert Sprite Sheet
     </button>
 </div>
 <div

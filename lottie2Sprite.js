@@ -8,6 +8,7 @@ const player = document.querySelector("lottie-player");
 const btnLoad = document.querySelector("#load");
 const btnConvert = document.querySelector("#convert");
 const btnConvertPng = document.querySelector("#convertPng");
+const btnConvertSprite = document.querySelector("#convertSprite");
 const inputLottieUrl = document.querySelector("#lottieUrl");
 const spriteName = document.querySelector("#spriteName");
 const imageWidth = document.querySelector("#imgW");
@@ -31,20 +32,15 @@ const loadAsImage = markup => {
 
 const convert = async url => {
     cancelled = false;
-
     log(`Loading image`);
-
     // Get lottie size
     const lottieDetails = await getLottieDetails(url);
-
     log(
         `Lottie as width = ${lottieDetails.width}, height = ${
             lottieDetails.height
         }, frames = ${lottieDetails.frames}`
     );
-
     log(`Set sprite dimensions...`);
-
     // Load into player
     player.addEventListener("ready", async () => {
         player.stop();
@@ -76,6 +72,7 @@ const convert = async url => {
             FileSaver.saveAs(content, "sprites_svg.zip");
         });
         log(`Done!`);
+        player.removeEventListener("ready", ()=> {})
     });
 
     log(`Startng animation...`);
@@ -104,6 +101,58 @@ const getLottieDetails = async url => {
     };
 };
 
+const convertSpiteSheet = async url => {
+    cancelled = false;
+    const zip = new JSZip();
+    log(`Loading ${url}`);
+    // Get lottie size
+    const lottieDetails = await getLottieDetails(url);
+    log(
+        `Lottie as width = ${lottieDetails.width}, height = ${
+            lottieDetails.height
+        }, frames = ${lottieDetails.frames}`
+    );
+
+    const canvas2 = document.createElement('canvas'); // Not shown on page
+    const ctx = canvas2.getContext("2d");
+    canvas2.height = imageHeight.value;
+    canvas2.width = imageWidth.value * lottieDetails.frames;
+
+    log(`Set sprite dimensions...`);
+
+    // Load into player
+    player.addEventListener("ready", async () => {
+        player.stop();
+        player.setLooping(false);
+        for (let f = 1; f <= lottieDetails.frames; f++) {
+            if (cancelled) break;
+            log(`Rendering frame #${f}...`);
+            player.seek(f);
+            const svgMarkup = await player.snapshot(false);
+            try {
+                const svgAsImg = await loadAsImage(svgMarkup);
+                const xOffset = imageWidth.value * (f - 1);
+                ctx.drawImage(svgAsImg, xOffset, 0, imageWidth.value, imageHeight.value);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        log(`Done!`);
+
+        const savable = new Image();
+        savable.src = canvas2.toDataURL("image/png");
+        zip.file(`${spriteName.value}_Sprite.png`, savable.src.substr(savable.src.indexOf(',')+1),{base64: true});
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            // see FileSaver.js
+            FileSaver.saveAs(content, "spritesSheet.zip");
+        });
+        player.removeEventListener("ready", ()=> {})
+    });
+
+    log(`Startng animation...`);
+    player.load(url);
+};
+
 const convertPNG = async url => {
     cancelled = false;
     log(`Loading image`);
@@ -129,13 +178,10 @@ const convertPNG = async url => {
 
         for (let f = 1; f <= lottieDetails.frames; f++) {
             if (cancelled) break;
-
             log(`Rendering frame #${f}...`);
             player.seek(f);
             // await new Promise(resolve => setTimeout(() => resolve(), 1000));
-
             const svgMarkup = await player.snapshot(false);
-
             try {
                 const svgAsImg = await loadAsImage(svgMarkup);
                 const canTemp = document.createElement('canvas'); // Not shown on page
@@ -146,19 +192,17 @@ const convertPNG = async url => {
                 const savable = new Image();
                 savable.src = canTemp.toDataURL("image/png");
                 photoZip.file(`${spriteName.value}_${f}.png`, savable.src.substr(savable.src.indexOf(',')+1),{base64: true});
-
             } catch (e) {
                 console.log(e);
             }
-
         }
         zip.generateAsync({type:"blob"}).then(function(content) {
             // see FileSaver.js
             FileSaver.saveAs(content, "sprites_png.zip");
         });
         log(`Done!`);
+        player.removeEventListener("ready", ()=> {})
     });
-
     log(`Startng animation...`);
     player.load(url);
 };
@@ -182,6 +226,12 @@ if (btnConvert) {
 if (btnConvertPng) {
     btnConvertPng.addEventListener("click", () => {
         convertPNG(inputLottieUrl.value);
+    });
+}
+
+if (btnConvertSprite) {
+    btnConvertSprite.addEventListener("click", () => {
+        convertSpiteSheet(inputLottieUrl.value);
     });
 }
 
