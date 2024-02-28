@@ -13,6 +13,10 @@
   },
   "author": "inti",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/inti25/web-tools.git"
+  },
   "dependencies": {
     "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
