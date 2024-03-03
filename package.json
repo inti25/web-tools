@@ -1,5 +1,5 @@
 {
-  "name": "inti25-web-tools",
+  "name": "inti25-tools",
   "version": "1.0.0",
   "description": "use for encrypt and decrypt data",
   "source": [
@@ -11,12 +11,13 @@
     "start": "parcel",
     "build": "parcel build --no-source-maps"
   },
-  "author": "inti",
+  "author": "inti25",
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/inti25/web-tools.git"
+    "url": "https://github.com/inti25/web-tools.git"
   },
+  "homepage": "https://github.com/inti25/web-tools",
   "dependencies": {
     "crypto-js": "^4.1.1",
     "file-saver": "^2.0.5",
